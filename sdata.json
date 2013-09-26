@@ -1,0 +1,72 @@
+[
+	{
+		id: '1',
+		title: 'Event1',
+		start: new Date(2013, 8, 25,7),
+		end: new Date(2013, 8, 25,8),
+		details: '',
+		project_id : 'g_deals',
+		user_d : 'ninz',
+		color : '#E3AAB2'
+	},
+	{
+		id: '2',
+		title: 'Event2',
+		start: new Date(2013, 8, 25,8),
+		end: new Date(2013, 8, 25,9,30),
+		details: '',
+		project_id : 'g_deals',
+		user_d : 'ninz',
+		color : '#E3AAB2'
+	},
+	{
+		id: '3',
+		title: 'Event3',
+		start: new Date(2013, 8, 25,12),
+		end: new Date(2013, 8, 25,9,12,30),
+		details: '',
+		project_id : 'g_deals',
+		user_d : 'ninz',
+		color : '#E3AAB2'
+	},
+	{
+		id: '4',
+		title: 'Event4',
+		start: new Date(2013, 8, 25,20,0),
+		end: new Date(2013, 8, 25,9,23,30),
+		details: '',
+		project_id : 'g_deals',
+		user_d : 'ninz',
+		color : '#E3AAB2'
+	},
+	{
+		id: '5',
+		title: 'Event5',
+		start: new Date(2013, 8, 24,8),
+		end: new Date(2013, 8, 24,9,30),
+		details: '',
+		project_id : 'pgc',
+		user_d : 'ninz',
+		color: '#CEAAE3'
+	},
+	{
+		id: '6',
+		title: 'Event6',
+		start: new Date(2013, 8, 26,8),
+		end: new Date(2013, 8, 26,9,30),
+		details: '',
+		project_id : 'g_deals',
+		user_d : 'ninz',
+		color : '#E3AAB2'
+	},
+	{
+		id: '7',
+		title: 'Event7',
+		start: new Date(2013, 8, 25,14),
+		end: new Date(2013, 8, 25,16,30),
+		details: '',
+		project_id : 'pgc',
+		user_d : 'ninz',
+		color: '#CEAAE3'
+	}
+]

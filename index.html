@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html >
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<script src="/js/vendor/custom.modernizr.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/foundation.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="/css/fullcalendar.css">
+	<link rel="stylesheet" type="text/css" href="/css/jquery.sidr.dark.css">
+	<link rel="stylesheet" type="text/css" href="/fonts/stylesheets/general_foundicons.css">
+	<style type="text/css">
+		html{
+			height:100%;
+			margin:0;
+			padding:0;
+		}
+		body {
+			height: 100%;
+			padding:0;
+			margin:0;
+			text-align: center;
+			font-size: 14px;
+			font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		}
+
+
+		#mc,#calendar,#left-menu{
+			height:100%;
+		}
+		#left-menu{
+			position:absolute;
+			top:0;
+			left:0;
+			font-size:25px;
+			background-color: #444;
+			height:100%;
+			width:55px;
+			text-align: left;
+			padding-left:15px;
+		}
+		.sb-b{
+			opacity: 1;
+   			transition: opacity .25s ease-in-out;
+		   -moz-transition: opacity .25s ease-in-out;
+		   -webkit-transition: opacity .25s ease-in-out;
+		}
+		.sb-b:hover{
+			opacity: 0.5;
+		}
+
+		 [class*="foundicon-"]:after { position: relative; top: -8px; left: 10px; color: #888; font-size: 60%; font-style: normal; }
+
+	</style>
+</head>
+<body>
+<header class='show-for-small'>
+	<nav class="top-bar" style='padding-left:5px;text-align:left;font-size:25px;'>
+		<div style='float:left'>
+			<a href="#sidr" id="up-button" class='sb-b'><i class="foundicon-people"></i></a>
+		</div>
+		<div style='float:right'>
+			<a href="#add-time" data-reveal-id="add-time" id="up-add-button" class='sb-b'><i class="foundicon-plus"></i></a>
+			&nbsp;
+			<a href="#away" data-reveal-id="away" id="up-away-button" class='sb-b'><i class="foundicon-flag"></i></a>
+			&nbsp;
+			<a href="#logout" id="up-logout-button" class='sb-b'><i class="foundicon-error"></i></a>
+			&nbsp;
+		</div>
+  	
+	</nav>
+</header>
+<div class="row" id='mc'>
+	<div id="left-menu" class="hide-for-small large-1 columns" >
+	<ul class="side-nav">
+  		<li><a href="#sidr" id="left-button" class='sb-b'><i class="foundicon-people"></i></a></li>
+  		<li class='sb-b'><a href="#add-time" data-reveal-id="add-time" id="left-button-2" class='sb-b'><i class="foundicon-plus"></i></a></li>
+	  	<li class='sb-b'><a href="#away" data-reveal-id="away" id="left-button-3" class='sb-b'><i class="foundicon-flag"></i></a></li>
+	  	<li class='sb-b'><a href="#" id="left-button-4" class='sb-b'><i class="foundicon-error"></i></a></li>
+  	
+	</ul>
+	</div>
+	<div class="small-12 large-10 columns" >
+		<br/>
+		<div class='hide-for-small row'>
+			<div class="small-12 large-12 pull-1 columns" style='width:100%;'>
+				<button class='small secondary button' style='float:left;' onclick="calendar_util.navigate('prev')"><<</button>
+				
+				<ul class="button-group" style='float:left;margin-left:10px;'>
+				  <li><a href="#" onclick="calendar_util.changeView('month')" class="small button">Month</a></li>
+				  <li><a href="#" onclick="calendar_util.changeView('agendaWeek')" id='week-big' class="small button">Week</a></li>
+				  <li><a href="#" onclick="calendar_util.changeView('agendaDay')" id='day-big' class="small button">Day</a></li>
+				</ul>
+				<button class='small success button' style='float:left;margin-left:10px;' onclick="calendar_util.navigate('today')">Today</button>
+
+				<button class='small secondary button' style='float:left; margin-left:10px;' onclick="calendar_util.navigate('next')">>></button>
+				<span class='alert label' id='title-date' style='float:right;margin-right:10px;'>Date Today</span>
+			</div>
+		</div>
+		<div class='row'>
+			<div class="small-12 large-12 pull-1 columns" style='width:100%;'>
+				<div id='calendar' style='width:100%;'></div>
+			</div>				
+		</div>
+	</div>	
+</div>
+
+
+<div id="sidr">
+ 	User info goes here [status(away,late)]
+ 	<br/>
+ 	**Nice to have
+ 	<br/>
+ 	Total time for the day, affected projects for the day
+</div>
+
+<div id='add-time' class="reveal-modal">
+	<h4>Add/Edit Time</h4>
+	<form>
+		<fieldset>
+			<legend id='time-label'></legend>
+
+			<div class="row">
+				<div class="large-8 columns">
+					<label><em style='color:#FF2E2E;'>****</em>Activity Name</label>
+					<input type="text" id='a-title' placeholder="Title">
+				</div>
+				<div class="large-4 columns">
+					<label><em style='color:#FF2E2E;'>****</em>Project</label>
+					<select id='a-project'>
+						<option value='g_deals'>gDeals</option>
+						<option value='pgc'>PGC</option>
+						<option value='twix'>Twix</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="large-6 columns">
+					<label><em style='color:#FF2E2E;'>****</em>Start Time</label>
+					<select id='a-start'>
+						<option value='00:00'>00:00 AM</option><option value='00:30'>00:30 AM</option><option value='1:00'>1:00 AM</option><option value='1:30'>1:30 AM</option><option value='2:00'>2:00 AM</option><option value='2:30'>2:30 AM</option><option value='3:00'>3:00 AM</option><option value='3:30'>3:30 AM</option><option value='4:00'>4:00 AM</option><option value='4:30'>4:30 AM</option><option value='5:00'>5:00 AM</option><option value='5:30'>5:30 AM</option><option value='6:00'>6:00 AM</option><option value='6:30'>6:30 AM</option><option value='7:00'>7:00 AM</option><option value='7:30'>7:30 AM</option><option value='8:00'>8:00 AM</option><option value='8:30'>8:30 AM</option><option value='9:00'>9:00 AM</option><option value='9:30'>9:30 AM</option><option value='10:00'>10:00 AM</option><option value='10:30'>10:30 AM</option><option value='11:00'>11:00 AM</option><option value='11:30'>11:30 AM</option><option value='12:00'>12:00 PM</option><option value='12:30'>12:30 PM</option><option value='13:00'>1:00 PM</option><option value='13:30'>1:30 PM</option><option value='14:00'>2:00 PM</option><option value='14:30'>2:30 PM</option><option value='15:00'>3:00 PM</option><option value='15:30'>3:30 PM</option><option value='16:00'>4:00 PM</option><option value='16:30'>4:30 PM</option><option value='17:00'>5:00 PM</option><option value='17:30'>5:30 PM</option><option value='18:00'>6:00 PM</option><option value='18:30'>6:30 PM</option><option value='19:00'>7:00 PM</option><option value='19:30'>7:30 PM</option><option value='20:00'>8:00 PM</option><option value='20:30'>8:30 PM</option><option value='21:00'>9:00 PM</option><option value='21:30'>9:30 PM</option><option value='22:00'>10:00 PM</option><option value='22:30'>10:30 PM</option><option value='23:00'>11:00 PM</option><option value='23:30'>11:30 PM</option>
+					</select>
+				</div>
+				<div class="large-6 columns">
+					<label><em style='color:#FF2E2E;'>****</em>End</label>
+					<select id='a-end'>
+						<option value='00:00'>00:00 AM</option><option value='00:30'>00:30 AM</option><option value='1:00'>1:00 AM</option><option value='1:30'>1:30 AM</option><option value='2:00'>2:00 AM</option><option value='2:30'>2:30 AM</option><option value='3:00'>3:00 AM</option><option value='3:30'>3:30 AM</option><option value='4:00'>4:00 AM</option><option value='4:30'>4:30 AM</option><option value='5:00'>5:00 AM</option><option value='5:30'>5:30 AM</option><option value='6:00'>6:00 AM</option><option value='6:30'>6:30 AM</option><option value='7:00'>7:00 AM</option><option value='7:30'>7:30 AM</option><option value='8:00'>8:00 AM</option><option value='8:30'>8:30 AM</option><option value='9:00'>9:00 AM</option><option value='9:30'>9:30 AM</option><option value='10:00'>10:00 AM</option><option value='10:30'>10:30 AM</option><option value='11:00'>11:00 AM</option><option value='11:30'>11:30 AM</option><option value='12:00'>12:00 PM</option><option value='12:30'>12:30 PM</option><option value='13:00'>1:00 PM</option><option value='13:30'>1:30 PM</option><option value='14:00'>2:00 PM</option><option value='14:30'>2:30 PM</option><option value='15:00'>3:00 PM</option><option value='15:30'>3:30 PM</option><option value='16:00'>4:00 PM</option><option value='16:30'>4:30 PM</option><option value='17:00'>5:00 PM</option><option value='17:30'>5:30 PM</option><option value='18:00'>6:00 PM</option><option value='18:30'>6:30 PM</option><option value='19:00'>7:00 PM</option><option value='19:30'>7:30 PM</option><option value='20:00'>8:00 PM</option><option value='20:30'>8:30 PM</option><option value='21:00'>9:00 PM</option><option value='21:30'>9:30 PM</option><option value='22:00'>10:00 PM</option><option value='22:30'>10:30 PM</option><option value='23:00'>11:00 PM</option><option value='23:30'>11:30 PM</option>
+					</select>
+				</div>
+			</div>
+			<br/>
+			<div class="row">
+				<div class="large-12 columns">
+					<label>Details/Remarks</label>
+					<textarea placeholder=""></textarea>
+				</div>
+			</div>
+
+		</fieldset>
+		<input type='hidden' id='a-day' value="" />
+		<input type='hidden' id='a-month' value="" />
+		<input type='hidden' id='a-year' value="" />
+		<input type='hidden' id='project_id' value="" />
+		<input type='hidden' id='user_id' value="" />
+	</form>
+	<a class="close-reveal-modal">&#215;</a>
+</div>
+
+<div id='away' class="reveal-modal" style='text-align:left;'>
+	<h4>I will not be able to work today..!</h4>
+	<p>Reason:</p>
+	<textarea>
+	</textarea>
+	<br/>
+	<button class='expand alert button'> Confirm </button>
+	<a class="close-reveal-modal">&#215;</a>
+</div>
+
+
+	<script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui-1.8.17.custom.min.js"></script>
+	<script src="/js/foundation.min.js"></script>
+
+	 <script src="/js/jquery.sidr.min.js"></script>
+
+<!--Calendar support-->
+	<script type="text/javascript" src="/js/fullcalendar.min.js"></script>
+	<script type="text/javascript" src="/js/init.js"></script>
+<!--END-->
+
+
+
+	<script type='text/javascript'>
+		$(document).foundation();
+	</script>
+
+</body>
+</html>
