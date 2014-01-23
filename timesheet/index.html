@@ -2,12 +2,28 @@
 <html >
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	<script src="/js/vendor/custom.modernizr.js"></script>
-	<link rel="stylesheet" type="text/css" href="/css/foundation.min.css">
-	<link rel="stylesheet" type="text/css" href="/css/normalize.css">
-	<link rel="stylesheet" type="text/css" href="/css/fullcalendar.css">
-	<link rel="stylesheet" type="text/css" href="/css/jquery.sidr.dark.css">
-	<link rel="stylesheet" type="text/css" href="/fonts/stylesheets/general_foundicons.css">
+	<script src="./js/vendor/custom.modernizr.js"></script>
+	<link rel="stylesheet" type="text/css" href="./css/foundation.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="./css/fullcalendar.css">
+	<link rel="stylesheet" type="text/css" href="./css/jquery.sidr.dark.css">
+	<link rel="stylesheet" type="text/css" href="./fonts/stylesheets/general_foundicons.css">
+	<script>
+		var access_token,user_id;
+
+		(function(root){
+			try{
+				c=root.cookie.split(';');
+				access_token = (c[0].split('='))[1];
+				user_id = (c[1].split('='))[1];
+				type = (c[3].split('='))[1];
+				(type == 'admin') && (window.location = 'admin/');
+			} catch(err){
+				window.location = "login.html?msg=Login to continue";
+			}
+		
+		})(document);
+	</script>
 	<style type="text/css">
 		html{
 			height:100%;
@@ -48,9 +64,26 @@
 			opacity: 0.5;
 		}
 
-		 [class*="foundicon-"]:after { position: relative; top: -8px; left: 10px; color: #888; font-size: 60%; font-style: normal; }
+		[class*="foundicon-"]:after { 
+			position: relative; top: -8px; left: 10px; color: #888; font-size: 60%; font-style: normal; 
+		}
+		#loading {
+			width:100%;
+			position: absolute;
+			top: 0;
+			display:none;
+		}
+		#loading h6 {
+			margin-left:auto;
+			margin-right:auto;
+			background-color:rgb(249, 237, 190);
+			width:100px;
+			border: rgb(240, 195, 109) solid 1px;
+			font-size: 12px;
+		}
 
 	</style>
+
 </head>
 <body>
 <header class='show-for-small'>
@@ -59,11 +92,11 @@
 			<a href="#sidr" id="up-button" class='sb-b'><i class="foundicon-people"></i></a>
 		</div>
 		<div style='float:right'>
-			<a href="#add-time" data-reveal-id="add-time" id="up-add-button" class='sb-b'><i class="foundicon-plus"></i></a>
+			<a href="#add-time"  onclick="modalOpen();" id="up-add-button" class='sb-b'><i class="foundicon-plus"></i></a>
 			&nbsp;
 			<a href="#away" data-reveal-id="away" id="up-away-button" class='sb-b'><i class="foundicon-flag"></i></a>
 			&nbsp;
-			<a href="#logout" id="up-logout-button" class='sb-b'><i class="foundicon-error"></i></a>
+			<a href="#logout" id="up-logout-button" class='sb-b' onclick='logout()'><i class="foundicon-error"></i></a>
 			&nbsp;
 		</div>
   	
@@ -73,9 +106,9 @@
 	<div id="left-menu" class="hide-for-small large-1 columns" >
 	<ul class="side-nav">
   		<li><a href="#sidr" id="left-button" class='sb-b'><i class="foundicon-people"></i></a></li>
-  		<li class='sb-b'><a href="#add-time" data-reveal-id="add-time" id="left-button-2" class='sb-b'><i class="foundicon-plus"></i></a></li>
+  		<li class='sb-b'><a href="#add-time"  onclick="modalOpen();" id="left-button-2" class='sb-b'><i class="foundicon-plus"></i></a></li>
 	  	<li class='sb-b'><a href="#away" data-reveal-id="away" id="left-button-3" class='sb-b'><i class="foundicon-flag"></i></a></li>
-	  	<li class='sb-b'><a href="#" id="left-button-4" class='sb-b'><i class="foundicon-error"></i></a></li>
+	  	<li class='sb-b'><a href="#" id="left-button-4" class='sb-b' onclick='logout();'><i class="foundicon-error"></i></a></li>
   	
 	</ul>
 	</div>
@@ -115,7 +148,7 @@
 
 <div id='add-time' class="reveal-modal">
 	<h4>Add/Edit Time</h4>
-	<form>
+	<form onsubmit="return false;">
 		<fieldset>
 			<legend id='time-label'></legend>
 
@@ -127,9 +160,7 @@
 				<div class="large-4 columns">
 					<label><em style='color:#FF2E2E;'>****</em>Project</label>
 					<select id='a-project'>
-						<option value='g_deals'>gDeals</option>
-						<option value='pgc'>PGC</option>
-						<option value='twix'>Twix</option>
+					
 					</select>
 				</div>
 			</div>
@@ -152,7 +183,7 @@
 			<div class="row">
 				<div class="large-12 columns">
 					<label>Details/Remarks</label>
-					<textarea placeholder=""></textarea>
+					<textarea id='a-details' placeholder=""></textarea>
 				</div>
 			</div>
 
@@ -162,8 +193,10 @@
 		<input type='hidden' id='a-year' value="" />
 		<input type='hidden' id='project_id' value="" />
 		<input type='hidden' id='user_id' value="" />
+		<button class='expand success button' id='sbm-btn'> Update Time </button>
 	</form>
 	<a class="close-reveal-modal">&#215;</a>
+	<span id='error-msg' style='font-size:11px;color:red;'></span>
 </div>
 
 <div id='away' class="reveal-modal" style='text-align:left;'>
@@ -176,22 +209,25 @@
 	<a class="close-reveal-modal">&#215;</a>
 </div>
 
+<div id='loading'>
+	<h6>Loading...</h6>
+</div>
 
-	<script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui-1.8.17.custom.min.js"></script>
-	<script src="/js/foundation.min.js"></script>
+	<script type="text/javascript" src="./js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="./js/jquery-ui-1.8.17.custom.min.js"></script>
+	<script src="./js/foundation.min.js"></script>
 
-	 <script src="/js/jquery.sidr.min.js"></script>
+	 <script src="./js/jquery.sidr.min.js"></script>
 
 <!--Calendar support-->
-	<script type="text/javascript" src="/js/fullcalendar.min.js"></script>
-	<script type="text/javascript" src="/js/init.js"></script>
+	<script type="text/javascript" src="./js/fullcalendar.min.js"></script>
+	<script type="text/javascript" src="./js/init.js"></script>
+	<script type="text/javascript" src="./js/routes.js"></script>
 <!--END-->
-
-
 
 	<script type='text/javascript'>
 		$(document).foundation();
+		init_all();
 	</script>
 
 </body>
